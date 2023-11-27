@@ -1,4 +1,5 @@
-# docker rm -f minio-etl:latest &&  docker-compose build --no-cache etl
+# Commands to run app
+# docker image rm -f minio-etl:latest &&  docker-compose build --no-cache etl
 # docker rm $(docker ps -a -q --filter "name=minio-etl-run")
 # docker compose run -it etl spark-submit --jars aws-java-sdk-bundle-1.12.540.jar,hadoop-aws-3.3.4.jar /opt/try_minio_with_pyspark.py
 

@@ -1,3 +1,4 @@
+# Commands to run app
 # docker image rm -f minio-etl:latest
 # docker rm $(docker ps -a -q --filter "name=minio-etl-run") && docker compose run -it etl python /opt/try_minio_with_python.py
 
