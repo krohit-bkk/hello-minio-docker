@@ -131,7 +131,7 @@ check_object_exists(source_bucket_name, 'sample_data/sample_data.csv')
 copy_object(source_bucket_name, 'sample_data/sample_data.csv', destination_bucket_name, 'sample_data/sample_data.csv')
 
 # 5. Download from MinIO
-download_from_s3(source_bucket_name, 'sample_data/sample_data.csv', '/opt/app/sample_data/sample_data1.csv')
+download_from_s3(source_bucket_name, 'sample_data/sample_data.csv', '/opt/sample_data/sample_data1.csv')
 
 # 6. Delete object from MinIO bucket
 delete_object(source_bucket_name, 'sample_data/sample_data.csv')
