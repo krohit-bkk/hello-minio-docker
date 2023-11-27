@@ -28,18 +28,18 @@ Using the Web-UI, naviage to `Buckets` on left hand side pane to create a bucket
 
 
 ### 3.1. Running simple python (boto3) app
-```python
+```shell
 docker compose run -it etl python /opt/try_minio_with_python.py
 ```
 
 
 ### 3.2. Running pyspark app
-```python
+```shell
 docker compose run -it etl spark-submit --jars aws-java-sdk-bundle-1.12.540.jar,hadoop-aws-3.3.4.jar /opt/try_minio_with_pyspark.py
 ```
 
-**P.S.:** If you run simple python app before pyspark app, ensure that the data file `sample_file/sample_file.csv` is present in the bucket `test-bucket-1`.
-The data file `test-bucket-1/sample_file/sample_file.csv` gets deleted as part of demo, hence, file not found. Error message would look something like this:
+**P.S.:** If you run **simple python app** before **pyspark app**, ensure that the data file `sample_file/sample_file.csv` is present in the bucket `test-bucket-1`.
+The data file `test-bucket-1/sample_file/sample_file.csv` gets deleted as part of **simple python app**, hence, you would get a `FileNotFoundException` or `PATH_NOT_FOUND`. Error message would look something like this:
 
 ```text
 pyspark.errors.exceptions.captured.AnalysisException: [PATH_NOT_FOUND] Path does not exist: s3a://test-bucket-1/sample_data.
