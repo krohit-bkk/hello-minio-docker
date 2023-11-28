@@ -5,11 +5,28 @@ Hello world to MinIO Object Store using Docker
 _**First draft:** Work in progress, detailed documentation to follow. Thank you for your understanding and patience._
 
 ### 1. Create MinIO container
+
+`cd` into your project directory and clone the repository. Ensure that all the files are present in your project directory.
 ```shell
+kumarrohit@Kumars-Mac-mini MinIO % git clone https://github.com/krohit-bkk/hello-minio-docker.git
+kumarrohit@Kumars-Mac-mini MinIO % pwd && tree .
+/Users/kumarrohit/Learning/Docker_Projects/MinIO
+.
+├── Dockerfile.etl
+├── README.md
+├── docker-compose.yml
+├── .gitignore
+├── minio_data
+│   ├── .gitkeep
+├── pyproject.toml
+├── sample_data.csv
+├── try_minio_with_pyspark.py
+└── try_minio_with_python.py
+
 docker compose up -d minio spark-master spark-worker
 ```
 
-Verify the required containers are up and running:
+Verify that all three required containers are up and running:
 ```text
 kumarrohit@Kumars-Mac-mini MinIO % docker ps
 CONTAINER ID   IMAGE                        COMMAND                  CREATED          STATUS          PORTS                                            NAMES
