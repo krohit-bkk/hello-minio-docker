@@ -10,6 +10,8 @@ _**First draft:** Work in progress, detailed documentation to follow. Thank you 
 ```shell
 kumarrohit@Kumars-Mac-mini MinIO % git clone https://github.com/krohit-bkk/hello-minio-docker.git
 kumarrohit@Kumars-Mac-mini MinIO % pwd && tree .
+```
+```text
 /Users/kumarrohit/Learning/Docker_Projects/MinIO
 .
 ├── Dockerfile.etl
@@ -22,7 +24,8 @@ kumarrohit@Kumars-Mac-mini MinIO % pwd && tree .
 ├── sample_data.csv
 ├── try_minio_with_pyspark.py
 └── try_minio_with_python.py
-
+```
+```shell
 docker compose up -d minio spark-master spark-worker
 ```
 
