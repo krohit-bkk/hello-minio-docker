@@ -47,7 +47,7 @@ a03c6d4d9935   bitnami/spark:3.5.0          "/opt/bitnami/script…"   28 minute
 The `etl` container has `sample_data.csv` located in `/opt/` which is our data file for demo. 
 
 #### 3.1. Simple python (boto3) app
-The `etl` container has `try_miniowith_python.py`, which is the main app located in `/opt/`.
+The `etl` container has `try_minio_with_python.py`, which is the main app located in `/opt/`.
 
 This app does these things in the given sequence:
 1. Create MinIO (S3) bucket
