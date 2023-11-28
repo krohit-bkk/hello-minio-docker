@@ -47,7 +47,7 @@ a03c6d4d9935   bitnami/spark:3.5.0          "/opt/bitnami/script…"   28 minute
 The `etl` container has `sample_data.csv` located in `/opt/` which is our data file for demo. 
 
 #### 3.1. Simple python (boto3) app
-The `etl` container has `try_minio_with_python.py`, which is the main app located in `/opt/`.
+The `etl` container has `try_minio_with_python.py`, which is the main app, located in `/opt/`.
 
 This app does these things in the given sequence:
 1. Create MinIO (S3) bucket
@@ -85,12 +85,12 @@ kumarrohit@Kumars-Mac-mini MinIO % docker compose run -it etl python /opt/try_mi
 ```
 
 #### 3.2. Running pyspark app
-The `etl` container has `try_minio_with_pyspark.py`, which is the main app located in `/opt/`.
+The `etl` container has `try_minio_with_pyspark.py`, which is the main app, located in `/opt/`.
 
 The app does these things in the given sequence:
-1. Read data from MinIO S3 as spark dataframe located at `test-bucket-1/sample_data/sample_data.csv`
-2. Wrie data to another location MinIO S3 bucket in parquet format at `test-bucket-1/sample_data1/`
-3. Read the parquet file as spark dataframe to verify the writes
+1. Read data from MinIO (S3) as spark dataframe located at `test-bucket-1/sample_data/sample_data.csv`
+2. Write another sample data to another location in MinIO (S3) bucket in parquet format at `test-bucket-1/sample_data1/`
+3. Read the parquet file (again) as spark dataframe to verify the writes
 
 Everytime, we print data from spark dataframe we are adding a column `Flag` to indicate the dataframe from which the data getting printed.
 
