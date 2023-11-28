@@ -19,37 +19,49 @@ a03c6d4d9935   bitnami/spark:3.5.0          "/opt/bitnami/script…"   28 minute
 ```
 
 
-### 2. Login to MinIO
-`http://localhost:9090`
+### 2. Quick MinIO setup and the basic know how
+1. http://localhost:9090
 
-Using the Web-UI, naviage to `Buckets` on left hand side pane to create a bucket named `test-bucket-1` and add file `sample_data.csv` in folder `sample_data`.
+![image](https://github.com/krohit-bkk/hello-minio-docker/assets/137164694/218df151-0a29-4822-a1b9-70bf18044c0d)
+
+2. Using the Web-UI, naviage to `Buckets` on left hand side pane to create a bucket named `test-bucket-1`. 
+
+![image](https://github.com/krohit-bkk/hello-minio-docker/assets/137164694/f0728d4f-3910-4c51-8013-25052fe35c4b)
+
+![image](https://github.com/krohit-bkk/hello-minio-docker/assets/137164694/4c29e30b-c8da-4c04-be14-5cadcc7c0555)
+
+3. Once bucket is created, navigate to `Object Browser` select the bucket and click on `create new path` and create a new folder and name it `sample_data`
+
+![image](https://github.com/krohit-bkk/hello-minio-docker/assets/137164694/c283cd7c-f1c0-4d39-8e9b-493282ad564f)
+
+![image](https://github.com/krohit-bkk/hello-minio-docker/assets/137164694/101b2cd9-a5d2-43e0-85fa-2fe713e79c38)
+
+4. Browse and add the file `sample_data.csv` in folder `sample_data`.
+
+![image](https://github.com/krohit-bkk/hello-minio-docker/assets/137164694/4f2f2105-8a35-4281-9067-d42506b060ac)
 
 **Note:** the final object path would look like this: `test-bucket-1/sample_data/sample_data.csv`
 
 
-### 3.1. Running simple python (boto3) app
+### 3. Running the apps
+The `etl` container has `sample_data.csv` located in `/opt/` which is our data file for demo. 
+
+#### 3.1. Simple python (boto3) app
+The `etl` container has `try_miniowith_python.py`, which is the main app located in `/opt/`.
+
+This app does these things in the given sequence:
+1. Create MinIO (S3) bucket
+2. Upload to MinIO (S3) from local storage (of container `etl`)
+3. Check if an object exists (on `test-bucket-1`)
+4. Copy object from one bucket `test-bucket-1` to another `test-bucket-2`
+5. Download object from MinIO (S3) to local storage (of container `etl` at `/opt/sample_data/sample_data1.csv`)
+6. Delete object from MinIO (S3) bucket (`test-bucket-1/sample_data/sample_data.csv`)
+
 ```shell
 docker compose run -it etl python /opt/try_minio_with_python.py
 ```
 
-
-### 3.2. Running pyspark app
-```shell
-docker compose run -it etl spark-submit --jars aws-java-sdk-bundle-1.12.540.jar,hadoop-aws-3.3.4.jar /opt/try_minio_with_pyspark.py
-```
-
-**P.S.:** If you run **simple python app** before **pyspark app**, ensure that the data file `sample_file/sample_file.csv` is present in the bucket `test-bucket-1`.
-The data file `test-bucket-1/sample_file/sample_file.csv` gets deleted as part of **simple python app**, hence, you would get a `FileNotFoundException` or `PATH_NOT_FOUND`. Error message would look something like this:
-
-```text
-pyspark.errors.exceptions.captured.AnalysisException: [PATH_NOT_FOUND] Path does not exist: s3a://test-bucket-1/sample_data.
-23/11/27 22:19:52 ERROR TransportRequestHandler: Error sending result StreamResponse[streamId=/jars/aws-java-sdk-bundle-1.12.540.jar,byteCount=339975924,body=FileSegmentManagedBuffer[file=/opt/aws-java-sdk-bundle-1.12.540.jar,offset=0,length=339975924]] to /192.168.0.4:50422; closing connection
-io.netty.channel.StacklessClosedChannelException
-    at io.netty.channel.AbstractChannel.close(ChannelPromise)(Unknown Source)
-```
-
-### 4. Successful run
-#### Simple python (boto3) app
+Console output:
 ```text
 kumarrohit@Kumars-Mac-mini MinIO % docker compose run -it etl python /opt/try_minio_with_python.py
 [+] Creating 3/0
@@ -59,7 +71,7 @@ kumarrohit@Kumars-Mac-mini MinIO % docker compose run -it etl python /opt/try_mi
 
 >>>> Bucket test-bucket-1 already exists
 
->>>> The file was not found
+>>>> File uploaded successfully to test-bucket-1/sample_data/sample_data.csv
 
 >>>> Object sample_data/sample_data.csv exists in test-bucket-1
 
@@ -72,7 +84,21 @@ kumarrohit@Kumars-Mac-mini MinIO % docker compose run -it etl python /opt/try_mi
 >>>> Object sample_data/sample_data.csv deleted from test-bucket-1
 ```
 
-#### Pyspark app
+#### 3.2. Running pyspark app
+The `etl` container has `try_minio_with_pyspark.py`, which is the main app located in `/opt/`.
+
+The app does these things in the given sequence:
+1. Read data from MinIO S3 as spark dataframe located at `test-bucket-1/sample_data/sample_data.csv`
+2. Wrie data to another location MinIO S3 bucket in parquet format at `test-bucket-1/sample_data1/`
+3. Read the parquet file as spark dataframe to verify the writes
+
+Everytime, we print data from spark dataframe we are adding a column `Flag` to indicate the dataframe from which the data getting printed.
+
+```shell
+docker compose run -it etl spark-submit --jars aws-java-sdk-bundle-1.12.540.jar,hadoop-aws-3.3.4.jar /opt/try_minio_with_pyspark.py
+```
+
+Console output:
 ```text
 kumarrohit@Kumars-Mac-mini MinIO % docker compose run -it etl spark-submit --jars aws-java-sdk-bundle-1.12.540.jar,hadoop-aws-3.3.4.jar /opt/try_minio_with_pyspark.py
 [+] Creating 3/0
@@ -127,3 +153,16 @@ kumarrohit@Kumars-Mac-mini MinIO % docker compose run -it etl spark-submit --jar
 |  1|  Alice| 25| df3|
 +---+-------+---+----+
 ```
+
+### 4. Any trouble?
+
+**__P.S.__:** If you run **simple python (boto3) app** before **pyspark app**, ensure that the data file `sample_file/sample_file.csv` is present in the bucket `test-bucket-1`.
+The data file `test-bucket-1/sample_file/sample_file.csv` gets deleted as part of **simple python app**, hence, you would get a `FileNotFoundException` or `PATH_NOT_FOUND`. Error message would look something like this:
+
+```text
+pyspark.errors.exceptions.captured.AnalysisException: [PATH_NOT_FOUND] Path does not exist: s3a://test-bucket-1/sample_data.
+23/11/27 22:19:52 ERROR TransportRequestHandler: Error sending result StreamResponse[streamId=/jars/aws-java-sdk-bundle-1.12.540.jar,byteCount=339975924,body=FileSegmentManagedBuffer[file=/opt/aws-java-sdk-bundle-1.12.540.jar,offset=0,length=339975924]] to /192.168.0.4:50422; closing connection
+io.netty.channel.StacklessClosedChannelException
+    at io.netty.channel.AbstractChannel.close(ChannelPromise)(Unknown Source)
+```
+To mitigate this issue, please follow the MinIO Web-UI guide (explained above) to upload the `sample_data.csv` file again, and then proceed with the pyspark app.
