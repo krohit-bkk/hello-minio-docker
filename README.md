@@ -11,6 +11,8 @@ _**First draft:** Work in progress, detailed documentation to follow. Thank you 
 kumarrohit@Kumars-Mac-mini MinIO % git clone https://github.com/krohit-bkk/hello-minio-docker.git
 kumarrohit@Kumars-Mac-mini MinIO % pwd && tree .
 ```
+
+Folder structure should look like this:
 ```text
 /Users/kumarrohit/Learning/Docker_Projects/MinIO
 .
@@ -25,6 +27,8 @@ kumarrohit@Kumars-Mac-mini MinIO % pwd && tree .
 ├── try_minio_with_pyspark.py
 └── try_minio_with_python.py
 ```
+
+Start the containers for MinIO and Spark
 ```shell
 docker compose up -d minio spark-master spark-worker
 ```
