@@ -123,7 +123,7 @@ create_minio_bucket(source_bucket_name)
 
 # 2. Upload to MinIO
 # Note: we copied our sample data (local) /opt/sample_data/sample_data.csv in Dockerfile.etl
-upload_to_s3('/opt/app/sample_data/sample_data.csv', source_bucket_name, 'sample_data/sample_data.csv')
+upload_to_s3('/opt/sample_data/sample_data.csv', source_bucket_name, 'sample_data/sample_data.csv')
 
 # 3. Check if an object exists (on source bucket)
 check_object_exists(source_bucket_name, 'sample_data/sample_data.csv')
