@@ -1,9 +1,6 @@
 # hello-minio-docker
 Hello world to MinIO Object Store using Docker
 
-### !!! README.md file
-_**First draft:** Work in progress, detailed documentation to follow. Thank you for your understanding and patience._
-
 ### 1. Create MinIO container
 
 `cd` into your project directory and clone the repository. Ensure that all the files are present in your project directory.
